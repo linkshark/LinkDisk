@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: LinkDisk
+  servlet:
+    multipart:
+      max-file-size:  50MB
+      max-request-size: 50MB
+server:
+  port: 9000
+
+hdfs:
+  path: hdfs://192.168.42.177:9000
+  username: root
