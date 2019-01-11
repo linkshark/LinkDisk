@@ -19,7 +19,7 @@ public class WordCountReduce extends Reducer<Text, LongWritable,Text,LongWritabl
     @Override
     protected void reduce(Text key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
 //        super.reduce(key, values, context);
-        long count =0 ;
+        long count = 0 ;
         for (LongWritable num:
              values) {
             count += num.get();
