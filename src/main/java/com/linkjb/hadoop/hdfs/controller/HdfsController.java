@@ -25,7 +25,7 @@ public class HdfsController {
      * 创建文件夹
      *
      * @param path
-     * @return ssv
+     * @return ssva
      * @throws Exception
      */
     @PostMapping("/mkdir")
