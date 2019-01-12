@@ -28,12 +28,12 @@ import java.util.Map;
 public class HdfsUtil {
     @Value("${hdfs.path}")
     private String path;
-    @Value("{hdfs.name}")
+    @Value("${hdfs.username}")
     private String username;
 
     private static String hdfsPath;
     private static String hdfsName;
-    private static final int bufferSize = 1024*1024*64;
+    private static final int bufferSize = 1024 * 1024 * 64;
 
 
     @PostConstruct
