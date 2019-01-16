@@ -1,5 +1,6 @@
 <template>
 <div class="background">
+  <p style="text-align: center">LinkDisk</p>
   <div class="suibian1">
     <el-form :model="RegistForm" v-show="this.RegistFlag" status-icon :rules="rules2" ref="RegistForm" label-width="80px" class="demo-ruleForm" >
       <el-form-item label="用户名" prop="userName" style="color: red">
@@ -98,16 +99,38 @@
           callback();
         }
       };
-      var checkUserName = (rule, value, callback) => {
+
+      var checkUserLoginName = (rule, value, callback) => { //登录检查用户名是否为空
         if (value === '') {
           return callback(new Error('用户名不能为空'));
         }else{
-          //TODO
           callback();
 
-        }
+        };
 
 
+
+
+      };
+      var checkUserName = (rule, value, callback) => { //注册查询后台用户名是否存在
+        if (value === '') {
+          return callback(new Error('用户名不能为空'));
+        }else{
+          let userName = this.RegistForm.userName;
+          let param = new URLSearchParams();
+          param.append("userName",userName);
+          this.$http.post('/login/checkUserName',param).then((res) =>{
+            console.log(res)
+            if(res.data.flag == 1){
+              //TODO 未完待续.....
+              callback();
+            }else{
+              return callback(new Error('用户名已存在...'))
+            }
+          })
+
+
+        };
       };
       return {
         LoginFlag : true,
@@ -123,7 +146,7 @@
         },
         rules: {
           userName: [
-            { validator: checkUserName, trigger: 'blur' }
+            { validator: checkUserLoginName, trigger: 'blur' }
           ],
           pass: [
             { validator: validateLoginPass, trigger: 'blur' }
@@ -151,6 +174,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('login!');
+            console.log(this.LoginForm)
           } else {
             console.log('error login!!');
             return false;
@@ -160,7 +184,25 @@
       Regist(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            let _this = this;
+            let params = new URLSearchParams();
+            let userName = _this.RegistForm.userName,
+                passWord = _this.RegistForm.pass;
+            params.append('userName',userName);
+            params.append('passWord',passWord);
+
+
+
             alert('submit!');
+            this.RegistFlag=false;
+            this.resetForm('RegistForm');
+            this.RegistForm =  {
+              userName:'',
+                pass:'',
+              checkPass: ''
+            },
+            this.LoginFlag=true;
+
           } else {
             console.log('error submit!!');
             return false;
