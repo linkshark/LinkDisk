@@ -121,7 +121,8 @@
           param.append("userName",userName);
           this.$http.post('/login/checkUserName',param).then((res) =>{
             console.log(res)
-            if(res.data.flag == 1){
+            console.log(typeof(res) )
+            if(res.data.entity == 1){
               //TODO 未完待续.....
               callback();
             }else{

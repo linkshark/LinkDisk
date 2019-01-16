@@ -1,4 +1,4 @@
-package com.linkjb.hadoop.hdfs.controller;
+package com.linkjb.controller;
 
 import com.linkjb.hadoop.util.HdfsUtil;
 import com.linkjb.hadoop.vo.BaseReturnVO;

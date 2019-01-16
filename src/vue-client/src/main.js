@@ -12,7 +12,7 @@ Vue.use(ElementUI)
 //使用axios向后台发送数据
 Vue.use(axios)
 //配置后台路径
-axios.defaults.baseURL = 'localhost:9000/';
+axios.defaults.baseURL = 'http://localhost:9000/';
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 Vue.prototype.$http = axios;
 //使用方法 Qs.stringify(data);

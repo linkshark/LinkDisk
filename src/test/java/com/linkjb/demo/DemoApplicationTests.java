@@ -1,6 +1,5 @@
 package com.linkjb.demo;
 
-import com.linkjb.hadoop.LinkDiskApplication;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
