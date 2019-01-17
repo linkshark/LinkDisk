@@ -5,9 +5,24 @@ spring:
     multipart:
       max-file-size:  500MB
       max-request-size: 500MB
+  datasource:
+    username: root
+    url: jdbc:mysql://linkjb.com:3306/linkdisk?useUnicode=true?characterEncoding=utf8
+    password: xiongge
+    driver-class-name: com.mysql.jdbc.Driver
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
 server:
   port: 9000
 
 hdfs:
   path: hdfs://192.168.42.177:9000
   username: root
+mybatis:
+  type-aliases-package: com.linkjb.entity
+  mapper-locations: classpath:mapper/*.xml
+  #开启驼峰命名转换
+logging:
+  level:
+    com.linkjb.dao : debug
+  config: classpath:logback-linkdisk.xml

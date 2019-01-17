@@ -119,11 +119,10 @@
           let userName = this.RegistForm.userName;
           let param = new URLSearchParams();
           param.append("userName",userName);
-          this.$http.post('/login/checkUserName',param).then((res) =>{
-            console.log(res)
-            console.log(typeof(res) )
+          this.$http.post('/User/Login/checkUserName',param).then((res) =>{
+            //console.log(res)
+            //console.log(typeof(res) )
             if(res.data.entity == 1){
-              //TODO 未完待续.....
               callback();
             }else{
               return callback(new Error('用户名已存在...'))
@@ -191,21 +190,24 @@
                 passWord = _this.RegistForm.pass;
             params.append('userName',userName);
             params.append('passWord',passWord);
+            this.$http.post('/User/Login/Regist',params).then((res) =>{
+              console.log(res)
+              if(res.data.status == "200"){
+                this.RegistFlag=false;
+                this.resetForm('RegistForm');
+                this.RegistForm =  {
+                  userName:'',
+                  pass:'',
+                  checkPass: ''
+                },
+                  this.LoginForm.userName=res.data.entity.userName;
+                  this.LoginFlag=true;
+              }else{
 
-
-
-            alert('submit!');
-            this.RegistFlag=false;
-            this.resetForm('RegistForm');
-            this.RegistForm =  {
-              userName:'',
-                pass:'',
-              checkPass: ''
-            },
-            this.LoginFlag=true;
-
+              }
+            })
           } else {
-            console.log('error submit!!');
+            //console.log('error submit!!');
             return false;
           }
         });
