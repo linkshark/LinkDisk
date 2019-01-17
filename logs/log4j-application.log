@@ -415,3 +415,12 @@ java.sql.SQLSyntaxErrorException: Unknown database 'test'
 2019-01-17 17:27:58 INFO  DruidDataSource:1608 - {dataSource-1} closed
 2019-01-17 17:28:06 INFO  DruidDataSource:847 - {dataSource-2} inited
 2019-01-17 17:36:15 INFO  DruidDataSource:847 - {dataSource-1} inited
+2019-01-17 20:37:24 INFO  DruidDataSource:847 - {dataSource-1} inited
+2019-01-17 20:47:26 INFO  DruidDataSource:1608 - {dataSource-1} closed
+2019-01-17 20:47:46 INFO  DruidDataSource:847 - {dataSource-2} inited
+2019-01-17 21:37:58 INFO  DruidDataSource:1608 - {dataSource-2} closed
+2019-01-17 21:39:08 INFO  DruidDataSource:847 - {dataSource-1} inited
+2019-01-17 22:22:03 INFO  DruidDataSource:1608 - {dataSource-1} closed
+2019-01-17 22:22:41 INFO  DruidDataSource:847 - {dataSource-2} inited
+2019-01-17 22:33:29 INFO  DruidDataSource:1608 - {dataSource-2} closed
+2019-01-17 22:37:39 INFO  DruidDataSource:847 - {dataSource-1} inited

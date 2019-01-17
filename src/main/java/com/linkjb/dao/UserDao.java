@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserDao {
-    public User getUserByUserName(String userName);
+    User getUserByUserName(String userName);
 
     Integer RegistUser(User user);
 }

@@ -4,11 +4,11 @@ import com.linkjb.base.BaseResult;
 import com.linkjb.base.ConstantSrting;
 import com.linkjb.entity.User;
 import com.linkjb.service.UserService;
+import com.linkjb.utils.MD5;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.security.provider.MD5;
 
 /**
  * @author sharkshen
@@ -23,7 +23,7 @@ public class UserController {
     private static Logger Log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
-
+    private static String salt = "sharkshen";
     /*
      * @Author sharkshen
      * @Description  通过用户名获取用户
@@ -67,6 +67,7 @@ public class UserController {
         System.out.println(user);
         BaseResult<User> result = new BaseResult<>();
        try{
+           user.setPassWord(MD5.encryptPassword(user.getPassWord(),salt));
            Integer a = userService.RegistUser(user); //a的值为sql影响的行数,一开始理解错误,是直接将id返回到对象中,所以可以直接返回对象
            if(a.equals(1)){
                result.setEntity(user);
@@ -80,6 +81,42 @@ public class UserController {
        }
         return result;
 
+    }
+
+    /*
+     * @Author sharkshen
+     * @Description  用户登录验证
+     * @Date  2019/1/17
+     * @Param [userName,passWord]
+     * @return com.linkjb.base.BaseResult<com.linkjb.entity.User>
+     **/
+    @PostMapping("/Login/Login")
+    public BaseResult<User> Login(@RequestParam("userName") String userName,@RequestParam("passWord") String passWord){
+        BaseResult<User> result = new BaseResult<>();
+        try{
+            User user = userService.getUserByUserName(userName);
+            if(user!=null){
+                String checkPass = user.getPassWord();
+                if(MD5.encryptPassword(passWord,salt).equals(checkPass)){
+                    result.setStatus(ConstantSrting.STATUS_SUCCESS);
+                    result.setEntity(user);
+                    return result;
+                }else{
+                    result.setStatus(ConstantSrting.STATUS_FAIL);
+                    result.setMessage("密码错误");
+                    return result;
+                }
+            }else{
+                result.setStatus(ConstantSrting.STATUS_FAIL);
+                result.setMessage("账号错误");
+                return result;
+            }
+        }catch (Exception e){
+            Log.error(e.getMessage());
+            result.setStatus(ConstantSrting.STATUS_SUCCESS);
+            result.setMessage(e.getMessage());
+        }
+        return result;
     }
 
 

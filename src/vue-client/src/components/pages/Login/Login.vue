@@ -1,6 +1,8 @@
 <template>
 <div class="background">
-  <p style="text-align: center">LinkDisk</p>
+  <div class="container" >
+    <p style="text-align: center">LinkDisk</p>
+  </div>
   <div class="suibian1">
     <el-form :model="RegistForm" v-show="this.RegistFlag" status-icon :rules="rules2" ref="RegistForm" label-width="80px" class="demo-ruleForm" >
       <el-form-item label="用户名" prop="userName" style="color: red">
@@ -16,10 +18,9 @@
     <!--<el-input v-model.number="RegistForm.age"></el-input>-->
     <!--</el-form-item>-->
       <el-form-item>
-        <el-button @click="resetForm('RegistForm')" style="margin-left: -25px ">重置</el-button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <el-button type="primary" @click="Regist('RegistForm')" size="middle" style="margin-left: -25px ">注册</el-button>
-        <!--<el-button type="primary" @click="Login('RegistForm')">登录</el-button>-->
+        <el-button type="warning" @click="showLogin()" style="margin-left: -25px ">返回</el-button>
+        <el-button type="info" @click="resetForm('RegistForm')" >重置</el-button>
+        <el-button type="primary" @click="Regist('RegistForm')" size="middle" >注册</el-button>
       </el-form-item>
 
     </el-form>
@@ -39,7 +40,7 @@
       <!--</el-form-item>-->
       <el-form-item>
         <el-button type="primary" @click="showRegist()" size="middle" style="margin-left: -25px ">注册</el-button>
-        <el-button @click="resetForm('LoginForm')">重置</el-button>
+        <el-button type="info" @click="resetForm('LoginForm')">重置</el-button>
         <el-button type="primary" @click="Login('LoginForm')">登录</el-button>
       </el-form-item>
 
@@ -170,14 +171,28 @@
         this.RegistFlag=true;
         this.LoginFlag=false
       },
+      showLogin(){
+        this.RegistFlag=false;
+        this.LoginFlag=true;
+      },
       Login(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('login!');
-            console.log(this.LoginForm)
+            // alert('login!');
+            // console.log(this.LoginForm)
+            let params = new URLSearchParams();
+            params.append("userName",this.LoginForm.userName)
+            params.append("passWord",this.LoginForm.pass)
+            this.$http.post('/User/Login/Login',params).then((res) =>{
+              console.log(res)
+            })
           } else {
-            console.log('error login!!');
-            return false;
+            this.$message({
+              showClose: true,
+              center: true,
+              message: '有东西写错了 >_<¦¦¦ 很尴尬~!!!',
+              type:'error'
+            });
           }
         });
       },
@@ -193,6 +208,12 @@
             this.$http.post('/User/Login/Regist',params).then((res) =>{
               console.log(res)
               if(res.data.status == "200"){
+                this.$message({
+                  showClose: true,
+                  center: true,
+                  type: 'success',
+                  message: '注册成功'
+                });
                 this.RegistFlag=false;
                 this.resetForm('RegistForm');
                 this.RegistForm =  {
@@ -201,9 +222,15 @@
                   checkPass: ''
                 },
                   this.LoginForm.userName=res.data.entity.userName;
+                   this.LoginForm.pass="";
                   this.LoginFlag=true;
               }else{
-
+                this.$message({
+                  showClose: true,
+                  center: true,
+                  message: '注册失败,后台程序猿要加班了!',
+                  type:'error'
+                });
               }
             })
           } else {
@@ -226,6 +253,7 @@
   background-size:cover;
   height: 100vh;
   width: 100%;
+  overflow: hidden;
 }
   .suibian1{
     width: 300px;
@@ -243,6 +271,78 @@
   .demo-ruleForm{
 
   }
+  .demo{
+    background: #666666;
+    /*width: 440px;*/
+    /*padding: 30px;*/
+    font: bold 55px/100% "微软雅黑", "Lucida Grande", "Lucida Sans", Helvetica, Arial, Sans;;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: -1px -1px rgba(197, 223, 248,0.8),-2px -2px rgba(197, 223, 248,0.8),-3px -3px rgba(197, 223, 248,0.8),-4px -4px rgba(197, 223, 248,0.8),-5px -5px rgba(197, 223, 248,0.8),-6px -6px rgba(197, 223, 248,0.8);
+  }
+.container {
+  width: 600px;
+  margin: 100px auto 0;
+}
+p {
+  font-family: 'Audiowide';
+  text-align: center;
+  color: #00a67c;
+  font-size: 7em;
+  -webkit-transition: all 1.5s ease;
+  transition: all 1.5s ease;
+}
+p:hover {
+  color: #fff;
+  -webkit-animation: Glow 1.5s ease infinite alternate;
+  animation: Glow 1.5s ease infinite alternate;
+
+}
+@-webkit-keyframes Glow {
+  from {
+    text-shadow: 0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 30px #fff,
+    0 0 40px #00a67c,
+    0 0 70px #00a67c,
+    0 0 80px #00a67c,
+    0 0 100px #00a67c,
+    0 0 150px #00a67c;
+  }
+  to {
+    text-shadow: 0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 15px #fff,
+    0 0 20px #00a67c,
+    0 0 35px #00a67c,
+    0 0 40px #00a67c,
+    0 0 50px #00a67c,
+    0 0 75px #00a67c;
+  }
+}
+@keyframes Glow {
+  from {
+    text-shadow: 0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 30px #fff,
+    0 0 40px #00a67c,
+    0 0 70px #00a67c,
+    0 0 80px #00a67c,
+    0 0 100px #00a67c,
+    0 0 150px #00a67c;
+  }
+  to {
+    text-shadow: 0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 15px #fff,
+    0 0 20px #00a67c,
+    0 0 35px #00a67c,
+    0 0 40px #00a67c,
+    0 0 50px #00a67c,
+    0 0 75px #00a67c;
+  }
+}
+
 .el-form-item__label {
   text-align: right;
   float: left;

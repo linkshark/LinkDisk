@@ -10,10 +10,10 @@
 
 
     <select id="getUserByUserName"  resultType="com.linkjb.entity.User">
-		SELECT * FROM user WHERE user_name = #{userName}
+		SELECT * FROM user WHERE userName = #{userName}
 	</select>
     <insert id="RegistUser"  parameterType="com.linkjb.entity.User" useGeneratedKeys="true" keyProperty="id">
-        insert into user(user_name,pass_word) values(#{userName},#{passWord})
+        insert into user(userName,passWord) values(#{userName},#{passWord})
         <!-- 指定结果类型resultType，keyProperty是属性，自动返回到属性id中，order是次序，after是指获取id是在于插入后 -->
         <!--<selectKey resultType="int" keyProperty="id" order="AFTER">-->
             <!--select last_insert_id()-->
