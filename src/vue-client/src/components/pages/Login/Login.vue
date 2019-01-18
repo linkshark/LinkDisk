@@ -2,7 +2,10 @@
 <div class="background">
   <div class="container" >
     <p style="text-align: center">LinkDisk</p>
+    <p class="shit" v-show="this.LoginFlag">登录</p>
+    <p class="shit" v-show="this.RegistFlag">注册</p>
   </div>
+
   <div class="suibian1">
     <el-form :model="RegistForm" v-show="this.RegistFlag" status-icon :rules="rules2" ref="RegistForm" label-width="80px" class="demo-ruleForm" >
       <el-form-item label="用户名" prop="userName" style="color: red">
@@ -43,6 +46,16 @@
         <el-button type="info" @click="resetForm('LoginForm')">重置</el-button>
         <el-button type="primary" @click="Login('LoginForm')">登录</el-button>
       </el-form-item>
+      <span class="showbuliaole">是否记住密码</span>
+      <el-tooltip :content="'记住密码: ' + rememberFlag" placement="top">
+        <el-switch
+          v-model="rememberFlag"
+          active-color="#13ce66"
+          inactive-color=gray
+          active-value= 1
+          inactive-value= 0>
+        </el-switch>
+      </el-tooltip>
 
     </el-form>
 
@@ -134,6 +147,7 @@
         };
       };
       return {
+        rememberFlag:0,
         LoginFlag : true,
         RegistFlag:false,
         LoginForm: {
@@ -184,7 +198,17 @@
             params.append("userName",this.LoginForm.userName)
             params.append("passWord",this.LoginForm.pass)
             this.$http.post('/User/Login/Login',params).then((res) =>{
-              console.log(res)
+              if(res.data.status == 200){
+                console.log(this.rememberFlag)
+                if(this.rememberFlag==1){
+                  this.$Cookies.set("userName",this.LoginForm.userName,{ expires: 7 });
+                  this.$Cookies.set("passWord",this.LoginForm.pass,{ expires: 7 })
+                }else{
+                  //debugger;
+                  this.$Cookies.remove("userName");
+                  this.$Cookies.remove("passWord")
+                }
+              }
             })
           } else {
             this.$message({
@@ -241,6 +265,13 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+    },
+    mounted () {
+      //this.$Cookies.set("沈超琦","大帅哥",)
+      console.log(this.$Cookies.get("userName"))
+      if(this.$Cookies.get("userName")!=undefined){
+        alert("免密登录成功")
       }
     }
   }
@@ -261,8 +292,8 @@
     left: 50%;
     top: 50%;
     position: absolute;
-    margin-left: -150px;
-    margin-top: -200px;
+    margin-left: -180px;
+    margin-top: -100px;
     /*background-color: white;*/
     /*border: 1px solid #000;*/
     color: red;
@@ -282,13 +313,27 @@
   }
 .container {
   width: 600px;
-  margin: 100px auto 0;
+  margin: 200px auto 0;
+  /*margin-left: 775px;*/
+  /*margin-top: 300px;*/
 }
+.shit {
+  width: 200px;
+  margin: 50px auto 0;
+  font-size: 2em;
+  color: #8b77ff;
+  font-weight: bold;
+}
+/*.container2{*/
+  /*width: 600px;*/
+  /*margin: 50px auto 0;*/
+/*}*/
 p {
   font-family: 'Audiowide';
   text-align: center;
-  color: #00a67c;
-  font-size: 7em;
+  color: #A62339;
+  font-size: 8em;
+  font-weight: bold;
   -webkit-transition: all 1.5s ease;
   transition: all 1.5s ease;
 }
@@ -303,21 +348,21 @@ p:hover {
     text-shadow: 0 0 10px #fff,
     0 0 20px #fff,
     0 0 30px #fff,
-    0 0 40px #00a67c,
-    0 0 70px #00a67c,
-    0 0 80px #00a67c,
-    0 0 100px #00a67c,
-    0 0 150px #00a67c;
+    0 0 40px #A62339,
+    0 0 70px #A62339,
+    0 0 80px #A62339,
+    0 0 100px #A62339,
+    0 0 150px #A62339;
   }
   to {
     text-shadow: 0 0 5px #fff,
     0 0 10px #fff,
     0 0 15px #fff,
-    0 0 20px #00a67c,
-    0 0 35px #00a67c,
-    0 0 40px #00a67c,
-    0 0 50px #00a67c,
-    0 0 75px #00a67c;
+    0 0 20px #A62339,
+    0 0 35px #A62339,
+    0 0 40px #A62339,
+    0 0 50px #A62339,
+    0 0 75px #A62339;
   }
 }
 @keyframes Glow {
@@ -325,21 +370,21 @@ p:hover {
     text-shadow: 0 0 10px #fff,
     0 0 20px #fff,
     0 0 30px #fff,
-    0 0 40px #00a67c,
-    0 0 70px #00a67c,
-    0 0 80px #00a67c,
-    0 0 100px #00a67c,
-    0 0 150px #00a67c;
+    0 0 40px #A62339,
+    0 0 70px #A62339,
+    0 0 80px #A62339,
+    0 0 100px #A62339,
+    0 0 150px #A62339;
   }
   to {
     text-shadow: 0 0 5px #fff,
     0 0 10px #fff,
     0 0 15px #fff,
-    0 0 20px #00a67c,
-    0 0 35px #00a67c,
-    0 0 40px #00a67c,
-    0 0 50px #00a67c,
-    0 0 75px #00a67c;
+    0 0 20px #A62339,
+    0 0 35px #A62339,
+    0 0 40px #A62339,
+    0 0 50px #A62339,
+    0 0 75px #A62339;
   }
 }
 
@@ -353,6 +398,9 @@ p:hover {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-weight: bold;
+}
+.showbuliaole{
+  margin-left: 95px;
 }
 
 
