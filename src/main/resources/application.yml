@@ -33,3 +33,9 @@ logging:
   level:
     com.linkjb.dao : debug
   config: classpath:logback-linkdisk.xml
+pool:
+  corePoolSize: 10
+  maxPoolSize: 200
+  queueCapacity: 10
+main:
+  allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册

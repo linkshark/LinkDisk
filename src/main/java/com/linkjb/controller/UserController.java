@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -46,7 +47,8 @@ public class UserController {
           // User user = userService.getUserByUserName(userName);
            //使用redis 进行查
            String s = redisUtil.get(userName);
-           System.out.println(s);
+           Log.info("redis中获取的值为"+s);
+           //System.out.println(s);
 
            if(s==null||s.equals(null)){
                result.setEntity(true);
@@ -74,7 +76,7 @@ public class UserController {
          **/
     @PostMapping("/Login/Regist")
     public BaseResult<User> Regist(User user){
-        System.out.println(user);
+        //System.out.println(user);
         BaseResult<User> result = new BaseResult<>();
 
        try{

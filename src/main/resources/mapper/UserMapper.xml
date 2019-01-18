@@ -19,5 +19,8 @@
             <!--select last_insert_id()-->
         <!--</selectKey>-->
     </insert>
+    <select id="getAllUser" resultType="com.linkjb.entity.User">
+        select * from user
+    </select>
 
 </mapper>
