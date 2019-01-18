@@ -1,4 +1,12 @@
 spring:
+  redis:
+    database: 0
+    host: 106.14.218.153
+    port: 6379
+    timeout: 1000ms
+    pool:
+      timeout: 0
+    password: shark
   application:
     name: LinkDisk
   servlet:
@@ -14,7 +22,6 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 server:
   port: 9000
-
 hdfs:
   path: hdfs://192.168.42.177:9000
   username: root

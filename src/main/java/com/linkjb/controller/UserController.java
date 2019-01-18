@@ -5,6 +5,8 @@ import com.linkjb.base.ConstantSrting;
 import com.linkjb.entity.User;
 import com.linkjb.service.UserService;
 import com.linkjb.utils.MD5;
+import com.linkjb.utils.RedisUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class UserController {
     private static Logger Log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
+    @Autowired
+    RedisUtil redisUtil;
     private static String salt = "sharkshen";
     /*
      * @Author sharkshen
@@ -38,8 +42,13 @@ public class UserController {
         BaseResult<Boolean> result = new BaseResult<>();
 
        try{
-           User user = userService.getUserByUserName(userName);
-           if(user==null||user.equals(null)){
+           //直接从redis中获取,不直接查询mysql
+          // User user = userService.getUserByUserName(userName);
+           //使用redis 进行查
+           String s = redisUtil.get(userName);
+           System.out.println(s);
+
+           if(s==null||s.equals(null)){
                result.setEntity(true);
                result.setStatus(ConstantSrting.STATUS_SUCCESS);
                return result;
@@ -51,6 +60,7 @@ public class UserController {
            }
        }catch (Exception e){
            result.setStatus(ConstantSrting.STATUS_FAIL);
+           e.printStackTrace();
            //Log.error("啦啦啦啦啦报错了====="+e.getMessage()+"=======");
        }
         return result;
@@ -66,10 +76,12 @@ public class UserController {
     public BaseResult<User> Regist(User user){
         System.out.println(user);
         BaseResult<User> result = new BaseResult<>();
+
        try{
            user.setPassWord(MD5.encryptPassword(user.getPassWord(),salt));
            Integer a = userService.RegistUser(user); //a的值为sql影响的行数,一开始理解错误,是直接将id返回到对象中,所以可以直接返回对象
            if(a.equals(1)){
+               redisUtil.set(user.getUserName(),user.getPassWord());
                result.setEntity(user);
                result.setStatus(ConstantSrting.STATUS_SUCCESS);
                return result;
@@ -94,23 +106,30 @@ public class UserController {
     public BaseResult<User> Login(@RequestParam("userName") String userName,@RequestParam("passWord") String passWord){
         BaseResult<User> result = new BaseResult<>();
         try{
-            User user = userService.getUserByUserName(userName);
-            if(user!=null){
-                String checkPass = user.getPassWord();
-                if(MD5.encryptPassword(passWord,salt).equals(checkPass)){
-                    result.setStatus(ConstantSrting.STATUS_SUCCESS);
-                    result.setEntity(user);
-                    return result;
+            if(redisUtil.get(userName)!=null&&redisUtil.get(userName).equals(MD5.encryptPassword(passWord,salt))){
+                result.setStatus(ConstantSrting.STATUS_SUCCESS);
+                //result.setEntity(user);
+                return result;
+            }else{
+                User user = userService.getUserByUserName(userName);
+                if(user!=null){
+                    String checkPass = user.getPassWord();
+                    if(MD5.encryptPassword(passWord,salt).equals(checkPass)){
+                        result.setStatus(ConstantSrting.STATUS_SUCCESS);
+                        result.setEntity(user);
+                        return result;
+                    }else{
+                        result.setStatus(ConstantSrting.STATUS_FAIL);
+                        result.setMessage("密码错误");
+                        return result;
+                    }
                 }else{
                     result.setStatus(ConstantSrting.STATUS_FAIL);
-                    result.setMessage("密码错误");
+                    result.setMessage("账号错误");
                     return result;
                 }
-            }else{
-                result.setStatus(ConstantSrting.STATUS_FAIL);
-                result.setMessage("账号错误");
-                return result;
             }
+
         }catch (Exception e){
             Log.error(e.getMessage());
             result.setStatus(ConstantSrting.STATUS_SUCCESS);
