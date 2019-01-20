@@ -11,8 +11,8 @@
     <groupId>com.linkjb</groupId>
     <artifactId>LinkDisk</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>LinkDisk</name>
+    <description>LinkDisk project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
