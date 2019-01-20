@@ -199,7 +199,12 @@
             params.append("passWord",this.LoginForm.pass)
             this.$http.post('/User/Login/Login',params).then((res) =>{
               if(res.data.status == 200){
-                console.log(this.rememberFlag)
+                this.$message({
+                  showClose: true,
+                  center: true,
+                  message: '登录成功',
+                  type:'success'
+                });
                 if(this.rememberFlag==1){
                   this.$Cookies.set("userName",this.LoginForm.userName,{ expires: 7 });
                   this.$Cookies.set("passWord",this.LoginForm.pass,{ expires: 7 })
@@ -208,6 +213,13 @@
                   this.$Cookies.remove("userName");
                   this.$Cookies.remove("passWord")
                 }
+              }else{
+                this.$message({
+                  showClose: true,
+                  center: true,
+                  message: '用户名/密码错误',
+                  type:'error'
+                });
               }
             })
           } else {

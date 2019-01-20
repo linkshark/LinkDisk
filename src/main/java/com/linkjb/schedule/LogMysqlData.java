@@ -26,7 +26,7 @@ public class LogMysqlData implements ApplicationRunner {
     @Resource
     UserDao userDao;
 
-    @Scheduled(fixedDelay=ONE_Minute) //执行完毕之后多久执行一次
+    @Scheduled(fixedDelay=ONE_Minute*30) //执行完毕之后多久执行一次
     public void fixedDelayJob(){
         log.info("每隔30分钟的定时任务,执行到第"+ ++count + "次"+userDao.getAllUser());
     }
